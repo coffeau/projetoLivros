@@ -14,7 +14,7 @@
       </v-radio-group>
     </tab-content>
     <tab-content title="Detalhamento">
-      <template v-if="estilo === 'Narrativa'">
+      <template v-if="estilo === 'Narrativaa'">
         Mostrarei um forma de narrativa
       </template>
       <template v-else-if="estilo === 'Poético'">
