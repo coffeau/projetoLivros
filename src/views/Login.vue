@@ -10,7 +10,7 @@
             <v-text-field dense outlined class="mt-6" label="E-mail"></v-text-field>
             <v-text-field dense outlined label="Senha"></v-text-field>
             <div class="botao">
-              <v-btn color="#E8E5AE">Salvar</v-btn>
+              <v-btn @click="login" color="#E8E5AE">Login</v-btn>
             </div>
           </v-container>
         </v-col>
