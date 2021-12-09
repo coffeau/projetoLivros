@@ -14,13 +14,13 @@
             </div>
           </v-container>
         </v-col>
-        <v-col cols="5" class="ms-md-12 logo">
+        <!-- <v-col cols="5" class="ms-md-12 logo">
           <div class="titulo">
             <div id="logo">Wormz</div>
             <v-divider cols="3" id="divider" color="#E8E5AE"></v-divider>
             <div id="conteudo" class="mt-6">Quer descobrir sua próxima leitura?</div>
           </div>
-        </v-col>
+        </v-col>  !-->
       </v-row>
     </v-img>
   </v-container>

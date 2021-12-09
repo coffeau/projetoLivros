@@ -19,7 +19,13 @@
             </div>
 
             <div class="botoes mt-9">
-              <v-btn elevation="2" x-large color="#E8E5AE" class="ms-4 primary--text">Login</v-btn>
+              <v-btn
+                @click="login"
+                elevation="2"
+                x-large
+                color="#E8E5AE"
+                class="ms-4 primary--text"
+              >Login</v-btn>
               <v-btn icon elevation="2" x-large class="ms-4 secondary">
                 <v-icon color="primary">mdi-google</v-icon>
               </v-btn>
@@ -34,7 +40,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    login() {
+      this.$router.push({
+        path: "/login"
+      });
+    }
+  }
+};
 </script>
 
 <style scoped>

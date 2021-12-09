@@ -2,7 +2,7 @@
   <v-app>
     <div class="fundo">
       <v-app-bar app flat color="primary" min-height="6vh">
-        <h1 link class="lista-app-bar subtitle-2 secondary--text">HOME</h1>
+        <h1 @click="home" class="lista-app-bar subtitle-2 secondary--text">HOME</h1>
         <h1 class="lista-app-bar ms-2 subtitle-2 secondary--text">QUIZZ</h1>
         <v-spacer></v-spacer>
         <h1 class="lista-app-bar lista-app-bar subtitle-2 secondary--text">
@@ -24,7 +24,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    home() {
+      this.$router.push({
+        name: "home"
+      });
+    }
+  }
+};
 </script>
 
 <style scoped>
