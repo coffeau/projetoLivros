@@ -34,7 +34,7 @@
           </v-col>
         </v-row>
       </v-img>
->>>>>>> fccd7addb43f80df0f72e383228287394a9b6f74
+
     </v-container>
   </div>
 

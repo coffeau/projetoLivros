@@ -1,6 +1,17 @@
 <template>
-  <v-container class="pa-8">
-    <h1 class="h1">Perfil</h1>
+  <v-container class="pa-15 ">
+    <v-row justify="center" mt="100px">
+      <v-avatar
+    size="90"
+    color="grey lighten-2"
+    
+    >
+    <img
+        src="https://cdn.vuetifyjs.com/images/john.jpg"
+        alt="John"
+      ></v-avatar>
+    </v-row>
+    
     <v-form>
       <v-container>
         <v-text-field label="Nome" v-model="nome"></v-text-field>
@@ -56,7 +67,7 @@ export default {
       }
     }
   }
-};
+}
 </script>
 
 <style></style>

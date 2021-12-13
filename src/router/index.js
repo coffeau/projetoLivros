@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Perfil from '../views/Perfil';
+
 import { auth } from '../plugins/firebase'
 
 Vue.use(VueRouter)
@@ -14,13 +15,23 @@ const routes = [
       { path: '/perfil', component: Perfil, name: "Perfil" },
       {
         path: '/login',
-        name: "Login",
+        name: 'Login',
         component: () => import('../views/Login.vue')
       },
       {
         path: '/home',
         name: 'home',
         component: () => import('../views/Home.vue')
+      },
+      {
+        path: '/formulario',
+        name: 'formulario',
+        component: () => import('../views/Formulario.vue')
+      },
+      {
+        path: '/perfil',
+        name: 'perfil',
+        component: () => import('../views/Perfil.vue')
       }
     ]
   },
