@@ -5,10 +5,27 @@
         <h1 @click="home" class="lista-app-bar subtitle-2 secondary--text">HOME</h1>
         <h1 class="lista-app-bar ms-2 subtitle-2 secondary--text">QUIZZ</h1>
         <v-spacer></v-spacer>
-        <h1 class="lista-app-bar lista-app-bar subtitle-2 secondary--text">
-          PERFIL
-          <v-icon color="secondary">mdi-chevron-down</v-icon>
-        </h1>
+
+        <v-menu open-on-hover offset-y>
+          <template v-slot:activator="{ on, attrs }">
+              <h1 class="lista-app-bar lista-app-bar subtitle-2 secondary--text">
+                PERFIL
+                <v-icon color="secondary" v-bind="attrs" v-on="on">mdi-chevron-down</v-icon>
+              </h1>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title>Olá, TODO </v-list-item-title>
+            </v-list-item>
+            <hr>
+            <v-list-item class="list-item">
+              <v-list-item-title>Perfil</v-list-item-title>
+            </v-list-item>
+            <v-list-item class="list-item">
+              <v-list-item-title @click="logout">Logout</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-app-bar>
 
       <v-main>
@@ -24,8 +41,10 @@
 </template>
 
 <script>
+import { mapActions} from 'vuex'
 export default {
   methods: {
+    ...mapActions('auth', ['logout']),
     home() {
       this.$router.push({
         name: "home"
@@ -72,7 +91,7 @@ export default {
   height: 5vh;
 }
 
-.lista-app-bar:hover {
+.lista-app-bar:hover, .list-item:hover {
   cursor: pointer;
 }
 </style>

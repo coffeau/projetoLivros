@@ -7,10 +7,10 @@
           <div id="titulo">Login</div>
           <v-container class="inputs">
             <v-divider color="#434C6D"></v-divider>
-            <v-text-field dense outlined class="mt-6" label="E-mail"></v-text-field>
-            <v-text-field dense outlined label="Senha"></v-text-field>
+            <v-text-field v-model="user.email" dense outlined class="mt-6" label="E-mail"></v-text-field>
+            <v-text-field v-model="user.password" type="password" dense outlined label="Senha"></v-text-field>
             <div class="botao">
-              <v-btn @click="login" color="#E8E5AE">Login</v-btn>
+              <v-btn @click="submitLogin" color="#E8E5AE">Login</v-btn>
             </div>
           </v-container>
         </v-col>
@@ -27,7 +27,21 @@
 </template>
 
 <script>
-export default {};
+import { mapActions } from 'vuex'
+export default {
+  data(){
+    return{
+      user: {},
+    }
+  },
+  methods:{
+    ...mapActions('auth', ['login']),
+    submitLogin(){
+      this.login(this.user)
+      // TODO this.$router.push({path: '/homeQuizz'})
+    }
+  }
+};
 </script>
 
 <style scoped>
