@@ -6,7 +6,7 @@
         <h1 class="lista-app-bar ms-2 subtitle-2 secondary--text">QUIZZ</h1>
         <v-spacer></v-spacer>
 
-        <v-menu open-on-hover offset-y>
+        <v-menu v-if="uid.length!=0" open-on-hover offset-y>
           <template v-slot:activator="{ on, attrs }">
               <h1 class="lista-app-bar lista-app-bar subtitle-2 secondary--text">
                 PERFIL
@@ -19,10 +19,10 @@
             </v-list-item>
             <hr>
             <v-list-item class="list-item">
-              <v-list-item-title>Perfil</v-list-item-title>
+              <v-list-item-title @click="perfil">Perfil</v-list-item-title>
             </v-list-item>
             <v-list-item class="list-item">
-              <v-list-item-title @click="logout">Logout</v-list-item-title>
+              <v-list-item-title @click="submitLogout">Logout</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -42,15 +42,44 @@
 
 <script>
 import { mapActions} from 'vuex'
+import * as fb from "@/plugins/firebase";
 export default {
+  data(){
+    return{
+      menu:true,
+      uid: '',
+    }
+  },
+  mounted(){
+      this.uid = fb.auth.currentUser.uid;
+      alert(this.uid)
+      if (this.uid.length != null && this.uid.length>0){
+        this.menu = true
+      }
+
+  },
   methods: {
     ...mapActions('auth', ['logout']),
     home() {
       this.$router.push({
         name: "home"
       });
+    },
+    perfil(){
+      this.$router.push({
+        path: '/perfil'
+      })
+    },
+    submitLogout(){
+      this.logout()
+      this.uid = ''
+      alert(this.uid)
+      this.$router.push({
+        name:'home'
+      })
     }
-  }
+  },
+
 };
 </script>
 
