@@ -25,8 +25,9 @@
               outlined
               label="Senha"
             ></v-text-field>
+            <a href="https://www.google.com/intl/pt/gmail/about/#" target="_blank" class="subtitle-2">Não tenho e-mail</a>
             <div class="botao">
-              <v-btn @click="submitLogin" color="#E8E5AE">Login</v-btn>
+            <v-btn @click="submitLogin" color="#E8E5AE" class="mt-4">Login</v-btn>
             </div>
           </v-container>
         </v-col>

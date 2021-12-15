@@ -15,7 +15,7 @@
           </template>
           <v-list>
             <v-list-item>
-              <v-list-item-title>Olá, TODO </v-list-item-title>
+              <v-list-item-title>Olá, {{ currentUser.uid }} </v-list-item-title>
             </v-list-item>
             <hr>
             <v-list-item class="list-item">
@@ -48,13 +48,16 @@ export default {
     return{
       menu:true,
       uid: '',
+      currentUser: ''
     }
   },
   mounted(){
-      this.uid = fb.auth.currentUser.uid;
-      alert(this.uid)
+      this.currentUser = fb.auth.currentUser
+      this.uid = this.currentUser.uid;
       if (this.uid.length != null && this.uid.length>0){
         this.menu = true
+      } else{
+        this.menu = false
       }
 
   },
@@ -72,7 +75,7 @@ export default {
     },
     submitLogout(){
       this.logout()
-      this.uid = ''
+      fb.auth.currentUser.uid = ''
       alert(this.uid)
       this.$router.push({
         name:'home'
