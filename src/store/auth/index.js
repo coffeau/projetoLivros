@@ -1,3 +1,5 @@
+
+
 export const auth = {
     namespaced: true,
     state: () => ({
@@ -8,6 +10,7 @@ export const auth = {
         setLoginInfo(state, user){
             state.user = user
             state.loggedIn = true
+
         },
         setLogout(state){
             state.user = {}
@@ -15,9 +18,10 @@ export const auth = {
         }
     },
     actions: {
-        login( {commit}, user){
+        async login( {commit}, user){
             commit('setloginInfo', user)
-        },
+                
+            },
         logout({commit}){
             commit('setLogout')
         }

@@ -6,7 +6,7 @@
         <h1 @click="formulario" class="lista-app-bar ms-2 subtitle-2 secondary--text">QUIZZ</h1>
         <v-spacer></v-spacer>
 
-        <v-menu open-on-hover offset-y>
+        <v-menu v-if="uid.length!=0" open-on-hover offset-y>
           <template v-slot:activator="{ on, attrs }">
               <h1 class="lista-app-bar lista-app-bar subtitle-2 secondary--text">
                 PERFIL
@@ -15,14 +15,16 @@
           </template>
           <v-list>
             <v-list-item>
-              <v-list-item-title>Olá, TODO </v-list-item-title>
+              <v-list-item-title>Olá, {{ currentUser.uid }} </v-list-item-title>
             </v-list-item>
             <hr>
-            <v-list-item class="list-item" @click='perfil'>
-              <v-list-item-title>Perfil</v-list-item-title>
+            
+            <v-list-item class="list-item">
+              <v-list-item-title @click="perfil">Perfil</v-list-item-title>
+
             </v-list-item>
             <v-list-item class="list-item">
-              <v-list-item-title @click="logout">Logout</v-list-item-title>
+              <v-list-item-title @click="submitLogout">Logout</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -42,7 +44,25 @@
 
 <script>
 import { mapActions} from 'vuex'
+import * as fb from "@/plugins/firebase";
 export default {
+  data(){
+    return{
+      menu:true,
+      uid: '',
+      currentUser: ''
+    }
+  },
+  mounted(){
+      this.currentUser = fb.auth.currentUser
+      this.uid = this.currentUser.uid;
+      if (this.uid.length != null && this.uid.length>0){
+        this.menu = true
+      } else{
+        this.menu = false
+      }
+
+  },
   methods: {
     ...mapActions('auth', ['logout']),
     home() {
@@ -50,6 +70,7 @@ export default {
         name: "home"
       });
     },
+
     formulario(){
       this.$router.push({
         name: "formulario"
@@ -57,12 +78,21 @@ export default {
     },
     perfil(){
       this.$router.push({
-        name: "perfil"
-      });
+        path: '/perfil'
+      })
+    },
+    submitLogout(){
+      this.logout()
+      fb.auth.currentUser.uid = ''
+      alert(this.uid)
+      this.$router.push({
+        name:'home'
+      })
     }
-  }
-  
-}
+  },
+
+};
+
 </script>
 
 <style scoped>
