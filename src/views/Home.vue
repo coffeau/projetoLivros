@@ -1,4 +1,5 @@
 <template>
+
   <div id="app">
     <v-divider color="#E8E5AE"></v-divider>
     <v-container id="containerTitulo" fluid class="primary pa-0">
@@ -33,6 +34,7 @@
           </v-col>
         </v-row>
       </v-img>
+
     </v-container>
   </div>
 
@@ -52,6 +54,7 @@ export default {
 </script>
 
 <style scoped>
+
 @import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@300&family=Encode+Sans&family=Libre+Baskerville&display=swap");
 
 .subtitle-2 {

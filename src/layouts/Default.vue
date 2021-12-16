@@ -3,7 +3,7 @@
     <div class="fundo">
       <v-app-bar app flat color="primary" min-height="6vh">
         <h1 @click="home" class="lista-app-bar subtitle-2 secondary--text">HOME</h1>
-        <h1 class="lista-app-bar ms-2 subtitle-2 secondary--text">QUIZZ</h1>
+        <h1 @click="formulario" class="lista-app-bar ms-2 subtitle-2 secondary--text">QUIZZ</h1>
         <v-spacer></v-spacer>
 
         <v-menu v-if="uid.length!=0" open-on-hover offset-y>
@@ -18,8 +18,10 @@
               <v-list-item-title>Olá, {{ currentUser.uid }} </v-list-item-title>
             </v-list-item>
             <hr>
+            
             <v-list-item class="list-item">
               <v-list-item-title @click="perfil">Perfil</v-list-item-title>
+
             </v-list-item>
             <v-list-item class="list-item">
               <v-list-item-title @click="submitLogout">Logout</v-list-item-title>
@@ -32,7 +34,7 @@
         <router-view></router-view>
       </v-main>
 
-      <v-divider color="#E8E5AE"></v-divider>
+      <!-- <v-divider color="#E8E5AE"></v-divider> -->
       <v-footer app color="primary" class="footer">
         <div class="textoFooter secondary--text">Criado por Kauane Delvoss e Eduarda Saibert :)</div>
       </v-footer>
@@ -68,6 +70,12 @@ export default {
         name: "home"
       });
     },
+
+    formulario(){
+      this.$router.push({
+        name: "formulario"
+      });
+    },
     perfil(){
       this.$router.push({
         path: '/perfil'
@@ -84,6 +92,7 @@ export default {
   },
 
 };
+
 </script>
 
 <style scoped>

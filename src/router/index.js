@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Perfil from '../views/Perfil';
+
 //import { auth } from '../plugins/firebase'
 //import { Store } from 'vuex';
 import store from '../store'
+
 
 Vue.use(VueRouter)
 
@@ -24,13 +26,23 @@ const routes = [
     children: [
       {
         path: '/login',
-        name: "Login",
+        name: 'Login',
         component: () => import('../views/Login.vue')
       },
       {
         path: '/',
         name: 'home',
         component: () => import('../views/Home.vue')
+      },
+      {
+        path: '/formulario',
+        name: 'formulario',
+        component: () => import('../views/Formulario.vue')
+      },
+      {
+        path: '/perfil',
+        name: 'perfil',
+        component: () => import('../views/Perfil.vue')
       }
     ]
   },
