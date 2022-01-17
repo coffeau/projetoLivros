@@ -13,45 +13,31 @@ const routes = [
   {
     path: '/',
     component: () => import('@/layouts/Default'),
-    meta: { auth: true, },
-    children: [
-      { path: '/perfil', component: Perfil, name: "Perfil" },
-    ]
-  },
-
-  {
-    path: '/',
-    component: () => import('@/layouts/Default'),
     meta: { auth: false },
     children: [
+      {
+        path: '',
+        name: 'Home',
+        component: () => import('../views/Home.vue')
+      },
       {
         path: '/login',
         name: 'Login',
         component: () => import('../views/Login.vue')
       },
       {
-        path: '/',
-        name: 'home',
-        component: () => import('../views/Home.vue')
-      },
-      {
         path: '/formulario',
         name: 'formulario',
         component: () => import('../views/Formulario.vue')
       },
-      {
-        path: '/perfil',
-        name: 'perfil',
-        component: () => import('../views/Perfil.vue')
-      }
     ]
   },
   {
     path: '/',
-    component: () => import('@/layouts/Blank'),
-    meta: { auth:false },
+    component: () => import('@/layouts/Default'),
+    meta: { auth: true, },
     children: [
-
+      { path: '/perfil', component: Perfil, name: "Perfil" },
     ]
   },
 ]

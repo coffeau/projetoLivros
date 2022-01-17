@@ -19,7 +19,7 @@ export const auth = {
     },
     actions: {
         async login( {commit}, user){
-            commit('setloginInfo', user)
+            commit('setLoginInfo', user)
                 
             },
         logout({commit}){

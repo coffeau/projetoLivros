@@ -7,7 +7,7 @@
     
     >
     <img
-        src="https://cdn.vuetifyjs.com/images/john.jpg"
+        src="@/assets/images/perfil.png"
         alt="John"
       ></v-avatar>
     </v-row>
@@ -27,10 +27,11 @@
 
 <script>
 import * as fb from "@/plugins/firebase";
+
 export default {
   data() {
     return {
-      nome: "",
+      nome: "Usuário",
       sobrenome: "",
       uid: "",
       temPerfil: false,

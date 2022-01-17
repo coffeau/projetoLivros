@@ -2,29 +2,39 @@
   <v-app>
     <div class="fundo">
       <v-app-bar app flat color="primary" min-height="6vh">
-        <h1 @click="home" class="lista-app-bar subtitle-2 secondary--text">HOME</h1>
-        <h1 @click="formulario" class="lista-app-bar ms-2 subtitle-2 secondary--text">QUIZZ</h1>
+        <h1 @click="home" class="lista-app-bar subtitle-2 secondary--text">
+          HOME
+        </h1>
+        <h1
+          @click="formulario"
+          class="lista-app-bar ms-2 subtitle-2 secondary--text"
+        >
+          QUIZZ
+        </h1>
         <v-spacer></v-spacer>
 
-        <v-menu v-if="uid.length!=0" open-on-hover offset-y>
+        <v-menu v-if="loggedIn" open-on-hover offset-y>
           <template v-slot:activator="{ on, attrs }">
-              <h1 class="lista-app-bar lista-app-bar subtitle-2 secondary--text">
-                PERFIL
-                <v-icon color="secondary" v-bind="attrs" v-on="on">mdi-chevron-down</v-icon>
-              </h1>
+            <h1 class="lista-app-bar lista-app-bar subtitle-2 secondary--text">
+              PERFIL
+              <v-icon color="secondary" v-bind="attrs" v-on="on"
+                >mdi-chevron-down</v-icon
+              >
+            </h1>
           </template>
           <v-list>
             <v-list-item>
-              <v-list-item-title>Olá, {{ currentUser.uid }} </v-list-item-title>
+              <v-list-item-title>Olá, {{ name }} </v-list-item-title>
             </v-list-item>
-            <hr>
-            
+            <hr />
+
             <v-list-item class="list-item">
               <v-list-item-title @click="perfil">Perfil</v-list-item-title>
-
             </v-list-item>
             <v-list-item class="list-item">
-              <v-list-item-title @click="submitLogout">Logout</v-list-item-title>
+              <v-list-item-title @click="submitLogout"
+                >Logout</v-list-item-title
+              >
             </v-list-item>
           </v-list>
         </v-menu>
@@ -36,38 +46,45 @@
 
       <!-- <v-divider color="#E8E5AE"></v-divider> -->
       <v-footer app color="primary" class="footer">
-        <div class="textoFooter secondary--text">Criado por Kauane Delvoss e Eduarda Saibert :)</div>
+        <div class="textoFooter secondary--text">
+          Criado por Kauane Delvoss e Eduarda Saibert :)
+        </div>
       </v-footer>
     </div>
   </v-app>
 </template>
 
 <script>
-import { mapActions} from 'vuex'
+import { mapActions, mapState} from 'vuex'
 import * as fb from "@/plugins/firebase";
 export default {
   data(){
     return{
-      menu:true,
-      uid: '',
+      menu:false,
+      name: '',
       currentUser: ''
     }
   },
-  mounted(){
-      this.currentUser = fb.auth.currentUser
-      this.uid = this.currentUser.uid;
-      if (this.uid.length != null && this.uid.length>0){
-        this.menu = true
-      } else{
-        this.menu = false
-      }
-
+  computed: {
+    ...mapState('auth', ['loggedIn', 'user'])
+  },
+  async mounted() {
+    this.uid = fb.auth.currentUser.uid;
+    const userProfile = await fb.profileCollection
+      .where("uid", "==", this.uid)
+      .get();
+    if (userProfile.docs.length > 0) {
+      this.profileId = perfil.id
+      const perfil = userProfile.docs[0]
+      console.log(userProfile.docs[0])
+      this.name = perfil.data().nome
+    }
   },
   methods: {
     ...mapActions('auth', ['logout']),
     home() {
       this.$router.push({
-        name: "home"
+        name: "Home"
       });
     },
 
@@ -81,13 +98,14 @@ export default {
         path: '/perfil'
       })
     },
-    submitLogout(){
+    async submitLogout(){
+      await fb.auth.signOut()
       this.logout()
-      fb.auth.currentUser.uid = ''
-      alert(this.uid)
+      this.uid = ''
+      this.menu = false
       this.$router.push({
-        name:'home'
-      })
+          name:'Login'
+        })
     }
   },
 
@@ -132,7 +150,8 @@ export default {
   height: 5vh;
 }
 
-.lista-app-bar:hover, .list-item:hover {
+.lista-app-bar:hover,
+.list-item:hover {
   cursor: pointer;
 }
 </style>
