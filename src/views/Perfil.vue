@@ -31,7 +31,7 @@ import * as fb from "@/plugins/firebase";
 export default {
   data() {
     return {
-      nome: "Usuário",
+      nome: "Usuárioo",
       sobrenome: "",
       uid: "",
       temPerfil: false,
