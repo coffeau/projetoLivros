@@ -34,13 +34,13 @@
         class="px-0"
         fluid
         >
-          <h3>Por qual gênero você mais se interessa? </h3>
-          <v-radio-group v-model="radioGroup">
+          <h3>Por qual gênero você mais se interessa? teste: {{preferenciaGenero}}  </h3>
+          <v-radio-group v-model="preferenciaGenero">
           <v-radio
           v-for="n in generos"
-          :key="n"
+          :key="n.nome"
           :label="`${n.nome}`"
-          :value="n"
+          :value="n.nome"
           color="secondary"
           ></v-radio>
           </v-radio-group>
@@ -131,7 +131,7 @@
           v-for="n in estrutura"
           :key="n"
           :label="`${n.nome}`"
-          :value="n"
+          :value="n.nome"
           color="secondary"
           ></v-radio>
           </v-radio-group>
