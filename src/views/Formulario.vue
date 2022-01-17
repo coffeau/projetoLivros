@@ -5,8 +5,10 @@
         :complete="e1 > 1"
         editable
         step="1"
+        click= "save()" 
+        placeholder = "preferenciaGenero"
       >
-        Gêneros
+        Gêneros 
       </v-stepper-step>
 
       <v-divider></v-divider>
@@ -154,6 +156,11 @@
 <script>
   export default {
     data () {
+      var preferenciaGenero = "";
+      var preferenciaTemporalidade = "";
+      var preferenciaDuracao = "";
+      var preferenciaNacionalidade = "";
+      var preferenciaEstrutura = "";
       const generos= [
         {
           nome: "Romance",
@@ -271,9 +278,22 @@
           
         }
       ]
-      return { generos, e1: 1 ,temporalidade, duracao, nacionalidade, estrutura}
+      return { generos, e1: 1 ,temporalidade, duracao, nacionalidade, estrutura, preferenciaGenero, preferenciaTemporalidade, preferenciaDuracao, preferenciaNacionalidade, preferenciaEstrutura}
+    },
+    mounted() {
+      this.preferenciaGenero = document.querySelector('v-radio[label="genero"]:checked').value ;
+    },
+    methods: {
+      save() {
+        this.preferenciaGenero = document.querySelector('v-radio[label="genero"]:checked').value ;
+        console.log (this.preferenciaGenero)
+      }
+
     }
+   
+
   }
+    
 </script>
 <style >
 .v-stepper__wrapper { 
