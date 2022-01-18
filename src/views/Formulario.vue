@@ -62,13 +62,13 @@
         class="px-0"
         fluid
         >
-          <h3>Qual sua preferência de temporalidade do livro?</h3>
-          <v-radio-group v-model="radioGroup">
+          <h3>Qual sua preferência de temporalidade do livro? {{preferenciaTemporalidade}}</h3>
+          <v-radio-group v-model="preferenciaTemporalidade">
           <v-radio
           v-for="n in temporalidade"
-          :key="n"
+          :key="n.nome"
           :label="`${n.nome}`"
-          :value="n"
+          :value="n.nome"
           color="secondary"
           ></v-radio>
           </v-radio-group>
@@ -78,13 +78,13 @@
         class="px-0"
         fluid
         >
-          <h3>Qual sua preferência de duração de leitura?</h3>
-          <v-radio-group v-model="radioGroup">
+          <h3>Qual sua preferência de duração de leitura? {{preferenciaDuracao}}</h3>
+          <v-radio-group v-model="preferenciaDuracao">
           <v-radio
           v-for="n in duracao"
-          :key="n"
+          :key="n.nome"
           :label="`${n.nome}`"
-          :value="n"
+          :value="n.nome"
           color="secondary"
           ></v-radio>
           </v-radio-group>
@@ -94,13 +94,13 @@
         class="px-0"
         fluid
         >
-          <h3>Gostaria de ler obras...</h3>
-          <v-radio-group v-model="radioGroup">
+          <h3>Gostaria de ler obras...{{preferenciaNacionalidade}}</h3>
+          <v-radio-group v-model="preferenciaNacionalidade">
           <v-radio
           v-for="n in nacionalidade"
-          :key="n"
+          :key="n.nome"
           :label="`${n.nome}`"
-          :value="n"
+          :value="n.nome"
           color="secondary"
           ></v-radio>
           </v-radio-group>
@@ -125,11 +125,11 @@
         class="px-0"
         fluid
         >
-          <h3>Qual sua estrutura textual preferida? </h3>
-          <v-radio-group v-model="radioGroup">
+          <h3>Qual sua estrutura textual preferida? {{preferenciaEstrutura}}</h3>
+          <v-radio-group v-model="preferenciaEstrutura">
           <v-radio
           v-for="n in estrutura"
-          :key="n"
+          :key="n.nome"
           :label="`${n.nome}`"
           :value="n.nome"
           color="secondary"
