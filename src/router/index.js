@@ -30,6 +30,11 @@ const routes = [
         name: 'formulario',
         component: () => import('../views/Formulario.vue')
       },
+      {
+        path: 'api',
+        name: 'api',
+        component: () => import('../api/api.vue')
+      }
     ]
   },
   {

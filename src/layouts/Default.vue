@@ -56,6 +56,7 @@
 
 <script>
 import { mapActions, mapState} from 'vuex'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import * as fb from "@/plugins/firebase";
 export default {
   data(){
@@ -69,16 +70,15 @@ export default {
     ...mapState('auth', ['loggedIn', 'user'])
   },
   async mounted() {
-    this.uid = fb.auth.currentUser.uid;
-    const userProfile = await fb.profileCollection
-      .where("uid", "==", this.uid)
-      .get();
-    if (userProfile.docs.length > 0) {
-      this.profileId = perfil.id
-      const perfil = userProfile.docs[0]
-      console.log(userProfile.docs[0])
-      this.name = perfil.data().nome
-    }
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user !== null && user.displayName.length > 0) {
+        const userInfo = user.displayName.split(",");
+        this.name = userInfo[0];
+      } else {
+        //
+      }
+    });
   },
   methods: {
     ...mapActions('auth', ['logout']),
