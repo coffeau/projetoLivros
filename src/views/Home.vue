@@ -1,5 +1,4 @@
 <template>
-
   <div id="app">
     <v-divider color="#E8E5AE"></v-divider>
     <v-container id="containerTitulo" fluid class="primary pa-0">
@@ -14,27 +13,35 @@
               <div id="titulo">Wormz</div>
               <v-divider id="divider" color="#E8E5AE"></v-divider>
               <div id="conteudo" class="mt-6">
-                Está querendo ler algum livro, porém não sabe onde buscar recomendações? Faça o quizz e descubra
-                algumas leituras, com a possibilidade de escrever e ler resenhas pela sua conta do GoogleBooks, tudo em um só site!
+                Está querendo ler algum livro, porém não sabe onde buscar
+                recomendações? Faça o quizz e descubra algumas leituras, com a
+                possibilidade de escrever e ler resenhas pela sua conta do
+                GoogleBooks, tudo em um só site!
               </div>
             </div>
 
             <div class="botoes mt-9">
               <v-btn
-                @click="login"
+                @click="submitLogin"
                 elevation="2"
                 x-large
                 color="#E8E5AE"
                 class="ms-4 primary--text"
-              >Login</v-btn>
-              <v-btn icon elevation="2" x-large class="ms-4 secondary">
+                >Login</v-btn
+              >
+              <v-btn
+                icon
+                elevation="2"
+                x-large
+                class="ms-4 secondary"
+                @click="loginGoogle"
+              >
                 <v-icon color="primary">mdi-google</v-icon>
               </v-btn>
             </div>
           </v-col>
         </v-row>
       </v-img>
-
     </v-container>
   </div>
 
@@ -42,19 +49,34 @@
 </template>
 
 <script>
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth";
+import * as fb from "@/plugins/firebase";
+import { mapActions } from "vuex";
 export default {
   methods: {
-    login() {
+    ...mapActions("auth", ["logout", "login"]),
+    submitLogin() {
       this.$router.push({
-        path: "/login"
+        path: "/login",
       });
-    }
-  }
+    },
+    loginGoogle() {
+      const provider = new GoogleAuthProvider();
+      signInWithRedirect(fb.auth, provider);
+      //provider.addScope('https://www.googleapis.com/auth/books');
+      getRedirectResult(fb.auth)
+        .then((result) => {
+          const user = result.user;
+          console.log(this.user)
+          this.login(user);
+        })
+        .catch();
+    },
+  },
 };
 </script>
 
 <style scoped>
-
 @import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@300&family=Encode+Sans&family=Libre+Baskerville&display=swap");
 
 .subtitle-2 {

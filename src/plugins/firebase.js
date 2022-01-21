@@ -1,6 +1,10 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+//import firebase from 'firebase/compat/app';
+//import 'firebase/compat/auth';
+//import 'firebase/compat/firestore';
+
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection } from 'firebase/firestore/lite'
+import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
     apiKey: "AIzaSyDb8Cue7PCPcACj9eba6p82EDDLHwXDNLk",
@@ -11,14 +15,15 @@ const firebaseConfig = {
     appId: "1:835183183640:web:af8d03042ed978c7e8c06d"
 };
 
-firebase.initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig);
+//firebase.initializeApp(firebaseConfig)
 
-const db = firebase.firestore()
-const auth = firebase.auth()
+const db = getFirestore(app)
+const auth = getAuth()
 
-const profileCollection = db.collection('profile')
-const tasksCollection = db.collection('tasks')
+const profileCollection = collection(db, 'profile')
+const booksCollection = collection(db, 'books')
 
 export {
-    db, auth, profileCollection, tasksCollection
+    db, auth, profileCollection, booksCollection
 }

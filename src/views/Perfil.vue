@@ -1,17 +1,11 @@
 <template>
-  <v-container class="pa-15 ">
+  <v-container class="pa-15">
     <v-row justify="center" mt="100px">
-      <v-avatar
-    size="90"
-    color="grey lighten-2"
-    
-    >
-    <img
-        src="https://cdn.vuetifyjs.com/images/john.jpg"
-        alt="John"
-      ></v-avatar>
+      <v-avatar size="90" color="grey lighten-2">
+        <img src="@/assets/images/perfil.png" alt="John"
+      /></v-avatar>
     </v-row>
-    
+
     <v-form>
       <v-container>
         <v-text-field label="Nome" v-model="nome"></v-text-field>
@@ -19,55 +13,56 @@
         <v-btn color="lime darken-1" @click="salvarPerfil">Salvar</v-btn>
       </v-container>
     </v-form>
-    <v-snackbar color="green" v-model="perfilSalvo" sucess multline timeout="2000"
+    <v-snackbar
+      color="green"
+      v-model="perfilSalvo"
+      sucess
+      multline
+      timeout="2000"
       >Salvo com sucesso!</v-snackbar
     >
   </v-container>
 </template>
 
 <script>
-import * as fb from "@/plugins/firebase";
+import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
+
 export default {
   data() {
     return {
       nome: "",
       sobrenome: "",
-      uid: "",
       temPerfil: false,
       perfilSalvo: false,
     };
   },
-  async mounted() {
-    this.uid = fb.auth.currentUser.uid;
-    const userProfile = await fb.profileCollection
-      .where("uid", "==", this.uid)
-      .get();
-    if (userProfile.docs.length > 0) {
-      this.temPerfil = true
-      const perfil = userProfile.docs[0]
-      this.profileId = perfil.id
-      this.nome = perfil.data().nome
-      this.sobrenome = perfil.data().sobrenome
-    }
-  },
-  methods:{
-    async salvarPerfil(){
-      this.perfilSalvo = true
-      if (this.temPerfil){
-        await fb.profileCollection.doc(this.profileId).update({
-          nome: this.nome,
-          sobrenome: this.sobrenome
-        })
-      } else{
-        await fb.profileCollection.add({
-          uid:this.uid,
-          nome: this.nome,
-          sobrenome: this.sobrenome,
-        })
+  methods: {
+    async salvarPerfil() {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user !== null) {
+        const userName = this.nome.concat(",", this.sobrenome);
+        this.perfilSalvo = true;
+        updateProfile(auth.currentUser, {
+          displayName: userName,
+        });
       }
-    }
-  }
-}
+    },
+  },
+  async mounted() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user !== null && user.displayName.length > 0) {
+        this.temPerfil = true;
+        const userInfo = user.displayName.split(",");
+        this.nome = userInfo[0];
+        this.sobrenome = userInfo[1];
+      } else {
+        //
+      }
+    });
+  },
+};
 </script>
 
 <style></style>

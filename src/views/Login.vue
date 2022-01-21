@@ -1,16 +1,40 @@
 <template>
   <v-container fluid class="pa-0">
-    <v-img class="d-flex align-center" max-height="89vh" src="@/assets/images/Group 3.png">
+    <v-img
+      class="d-flex align-center"
+      max-height="89vh"
+      src="@/assets/images/Group 3.png"
+    >
       <v-row align="center">
         <v-col cols="6" class="ms-md-12 col">
           <div class="titulo"></div>
           <div id="titulo">Login</div>
           <v-container class="inputs">
             <v-divider color="#434C6D"></v-divider>
-            <v-text-field v-model="user.email" dense outlined class="mt-6" label="E-mail"></v-text-field>
-            <v-text-field v-model="user.password" type="password" dense outlined label="Senha"></v-text-field>
+            <v-text-field
+              v-model="user.email"
+              dense
+              outlined
+              class="mt-6"
+              label="E-mail"
+            ></v-text-field>
+            <v-text-field
+              v-model="user.password"
+              type="password"
+              dense
+              outlined
+              label="Senha"
+            ></v-text-field>
+            <a
+              href="https://www.google.com/intl/pt/gmail/about/#"
+              target="_blank"
+              class="subtitle-2"
+              >Não tenho e-mail</a
+            >
             <div class="botao">
-              <v-btn @click="submitLogin" color="#E8E5AE">Login</v-btn>
+              <v-btn @click="submitLogin" color="#E8E5AE" class="mt-4"
+                >Login</v-btn
+              >
             </div>
           </v-container>
         </v-col>
@@ -23,24 +47,80 @@
         </v-col>  !-->
       </v-row>
     </v-img>
+    <v-snackbar color="red" v-model="errorLogin" danger multline timeout="2000"
+      >Usuário ou senha inválidos</v-snackbar
+    >
+    <v-dialog v-model="novaConta" persistent max-width="300px">
+      <v-card>
+        <v-card-title>Conta não encontrada.</v-card-title>
+        <v-card-text
+          >A conta não foi localizada. Deseja criar uma nova conta?</v-card-text
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="criarNovaConta">Sim</v-btn>
+          <v-btn color="red darken-1" text @click="novaConta = false"
+            >Não</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
+import * as fb from "@/plugins/firebase";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
+
 export default {
-  data(){
-    return{
+  data() {
+    return {
       user: {},
-    }
+      show: false,
+      errorLogin: false,
+      novaConta: false,
+    };
   },
-  methods:{
-    ...mapActions('auth', ['login']),
-    submitLogin(){
-      this.login(this.user)
-      // TODO this.$router.push({path: '/homeQuizz'})
-    }
-  }
+  methods: {
+    ...mapActions("auth", ["login"]),
+    async submitLogin() {
+      try {
+        const user = await signInWithEmailAndPassword(
+          fb.auth,
+          this.user.email,
+          this.user.password
+        );
+        this.login(user.user);
+        this.$router.push({ name: "Home" });
+      } catch (error) {
+        const errorCode = error.code;
+        switch (errorCode) {
+          case "auth/wrong-password":
+            this.errorLogin = true;
+            break;
+          case "auth/invalid-email":
+            this.errorLogin = true;
+            break;
+          case "auth/user-not-found":
+            this.novaConta = true;
+            break;
+          default:
+            this.errorLogin = true;
+            break;
+        }
+      }
+    },
+    async criarNovaConta() {
+      this.novaConta = false;
+      await createUserWithEmailAndPassword(
+        fb.auth,
+        this.user.email,
+        this.user.password
+      );
+      this.login(this.user);
+    },
+  },
 };
 </script>
 
