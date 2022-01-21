@@ -140,7 +140,7 @@
 
         <v-btn
           color="success"
-          @click="e1 = 1"
+          @click="save()"
         >
           Salvar
         </v-btn>
@@ -154,6 +154,8 @@
   </v-stepper>
 </template>
 <script>
+  import * as db from "../plugins/firebase"
+  import { doc, setDoc } from "firebase/firestore";
   export default {
     data () {
       var preferenciaGenero = "";
@@ -281,15 +283,17 @@
       return { generos, e1: 1 ,temporalidade, duracao, nacionalidade, estrutura, preferenciaGenero, preferenciaTemporalidade, preferenciaDuracao, preferenciaNacionalidade, preferenciaEstrutura}
     },
     mounted() {
-      this.preferenciaGenero = document.querySelector('v-radio[label="genero"]:checked').value ;
+
     },
     methods: {
-      save() {
-        this.preferenciaGenero = document.querySelector('v-radio[label="genero"]:checked').value ;
-        console.log (this.preferenciaGenero)
+      async save() {
+         await setDoc(doc(db, "profile", "LA"), {
+          nome: "Los Angeles",
+          sobrenome: "CA",
+          uid: "USA"
+        });
       }
-
-    }
+    },
    
 
   }
