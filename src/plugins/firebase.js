@@ -25,5 +25,5 @@ const profileCollection = collection(db, 'profile')
 const booksCollection = collection(db, 'books')
 
 export {
-    db, auth, profileCollection, booksCollection
+    db, auth, profileCollection, booksCollection, app
 }
