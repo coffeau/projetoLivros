@@ -126,6 +126,7 @@ export default {
     var preferenciaDuracao = "";
     var preferenciaNacionalidade = "";
     var preferenciaEstrutura = "";
+    var uid = "";
     const generos = [
       {
         nome: "Romance",
@@ -252,19 +253,27 @@ export default {
       preferenciaDuracao,
       preferenciaNacionalidade,
       preferenciaEstrutura,
+      uid
     };
   },
-  mounted() {},
+  mounted() {
+    this.uid = db.auth.currentUser.uid;
+  },
   methods: {
     async save() {
       const database = getFirestore(db.app)
+      
       try {
-        const docRef = await addDoc(collection(database, "users"), {
-          first: "Ada",
-          last: "Lovelace",
-          born: 1815,
+        const docRef = await addDoc(collection(database, "book_preferences"), {
+          uid_user : this.uid,
+          genero : this.preferenciaGenero,
+          temporalidade : this.preferenciaTemporalidade,
+          duracao : this.preferenciaDuracao,
+          nacionalidade : this.preferenciaNacionalidade,
+          estrutura : this.preferenciaEstrutura
         });
-        console.log("Document written with ID: ", docRef.id);
+        console.log("Document written with ID: ", docRef.id,  );
+        console.log(this.uid);
       } catch (e) {
         console.error("Error adding document: ", e);
       }
