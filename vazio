@@ -9,3 +9,4 @@
         this.preferenciaDuracao = "";
         this.preferenciaNacionalidade = "";
         this.preferenciaEstrutura = "";
+         userRef = doc(database, 'profile', this.uid);
