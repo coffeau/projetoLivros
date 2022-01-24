@@ -16,7 +16,7 @@
 export default {
   data() {
     return {
-      livros: [],
+      livros:[],
       headers: [
         { text: "Título", value: "title" },
         { text: "Autores", value: "authors" },
@@ -24,28 +24,15 @@ export default {
       ],
     };
   },
-  mounted() {
-    ///const data = this.fazFetch(
-    ///"https://www.googleapis.com/books/v1/volumes?q=subject:fiction&langRestrict=pt&printType=books&maxResults=40&key=AIzaSyDb8Cue7PCPcACj9eba6p82EDDLHwXDNLk"
-    ///);
+  async mounted() {
     let url =
       "https://www.googleapis.com/books/v1/volumes?q=subject:fiction&langRestrict=pt&printType=books&maxResults=40&key=AIzaSyDb8Cue7PCPcACj9eba6p82EDDLHwXDNLk";
-    const teste = fetch(url).then(function (response) {
-      return response.json().then(function (data) {
-        let livros = [];
-        data.items.forEach((livro) => {
-          livros.push(livro.volumeInfo);
-        });
-        return livros.map(function(livro){
-          this.livros.push()
-        })
-      });
-    });
+
+    let data = await this.fazFetch(url)
+    this.livros = data
     //data.items.forEach((livro) => {
       //this.livros.push(livro.volumeInfo);
     //});
-
-    this.livros = teste;
 
     // this.livros = JSON.parse(data).items[2].volumeInfo;
     // // livros = livros.items;
@@ -59,7 +46,7 @@ export default {
   },
 
   computed: {
-    criaLinha(livro) {
+    criaLinha(livro) {    
       var linha = document.createElement("tr");
       var tdId = document.createElement("td");
       var tdNome = document.createElement("td");
@@ -79,10 +66,27 @@ export default {
     //  request.send();
     //  return request.responseText;
     //},
-    fazFetch(url) {
+    async fazFetch(url){
+        let livros = []
+        const response = await fetch(url);
+        const data = await response.json();
+        data.items.forEach((livro) => {
+          livros.push(livro.volumeInfo)
+        })
+
+        return livros
+      
+      /*
       fetch(url).then(function (response) {
-        return response.json();
+      return response.json().then(function (data) {
+        let livros = [];
+        data.items.forEach((livro) => {
+          livros.push(livro.volumeInfo);
+        });
+      livros.push(data)
+      return livros
       });
+    });*/
     },
     aleatorio(livros) {
       let numeroAleatorio = Math.floor(Math.random() * 41);
