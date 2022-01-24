@@ -1,24 +1,29 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
+//import firebase from 'firebase/compat/app';
+//import 'firebase/compat/auth';
+//import 'firebase/compat/firestore';
+
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection } from 'firebase/firestore/lite'
+import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAkcX8TKTPjjFIOETiYzeKggDOqX7-fM-o",
-    authDomain: "todo-list-vue-f1676.firebaseapp.com",
-    projectId: "todo-list-vue-f1676",
-    storageBucket: "todo-list-vue-f1676.appspot.com",
-    messagingSenderId: "333308231800",
-    appId: "1:333308231800:web:a32fe56d7ecaa2f2f9ad8d"
+    apiKey: "AIzaSyDb8Cue7PCPcACj9eba6p82EDDLHwXDNLk",
+    authDomain: "projetointegrador-livros.firebaseapp.com",
+    projectId: "projetointegrador-livros",
+    storageBucket: "projetointegrador-livros.appspot.com",
+    messagingSenderId: "835183183640",
+    appId: "1:835183183640:web:af8d03042ed978c7e8c06d"
 };
 
-firebase.initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig);
+//firebase.initializeApp(firebaseConfig)
 
-const db = firebase.firestore()
-const auth = firebase.auth()
+const db = getFirestore(app)
+const auth = getAuth()
 
-const profileCollection = db.collection('profile')
-const tasksCollection = db.collection('tasks')
+const profileCollection = collection(db, 'profile')
+const booksCollection = collection(db, 'books')
 
-export{
-    db, auth, profileCollection, tasksCollection
+export {
+    db, auth, profileCollection, booksCollection, app
 }

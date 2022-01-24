@@ -1,0 +1,12 @@
+ data: new Date().toISOString().slice(0,10),
+          temporality: this.preferenciaTemporalidade,
+          duration: this.preferenciaDuracao,
+          nacionality: this.preferenciaNacionalidade,
+          structure: this.preferenciaEstrutura,
+        });
+        this.preferenciaGenero = "";
+        this.preferenciaTemporalidade = "";
+        this.preferenciaDuracao = "";
+        this.preferenciaNacionalidade = "";
+        this.preferenciaEstrutura = "";
+         userRef = doc(database, 'profile', this.uid);
