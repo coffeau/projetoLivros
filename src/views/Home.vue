@@ -1,120 +1,124 @@
 <template>
-  <v-container class="px-8" fluid>
-    <v-row class="py-7">
-      <h1 class="h1 ms-2">Meu Bloco de Notas</h1>
-      <dialogg v-on:adicionar="adicionar"></dialogg>
-    </v-row>
+  <div id="app">
+    <v-divider color="#E8E5AE"></v-divider>
+    <v-container id="containerTitulo" fluid class="primary pa-0">
+      <v-img
+        class="d-flex align-center"
+        max-height="89vh"
+        src="@/assets/images/livros-background.png"
+      >
+        <v-row>
+          <v-col cols="6" class="ms-md-12">
+            <div class="titulo">
+              <div id="titulo">Wormz</div>
+              <v-divider id="divider" color="#E8E5AE"></v-divider>
+              <div id="conteudo" class="mt-6">
+                Está querendo ler algum livro, porém não sabe onde buscar
+                recomendações? Faça o quizz e descubra algumas leituras, com a
+                possibilidade de escrever e ler resenhas pela sua conta do
+                GoogleBooks, tudo em um só site!
+              </div>
+            </div>
 
-    <v-divider></v-divider>
-
-    <v-card id="card" class="d-flex justify-center align-center flex-column ma-10 elevation-0">
-      <v-icon large color="lime">mdi-pen-plus</v-icon>
-      <v-card-title>
-        <h2 class="h2">Você ainda não tem anotações!!</h2>
-      </v-card-title>
-    </v-card>
-
-    <v-container fluid>
-      <v-row dense>
-        <v-col v-for="tarefa of tarefas" :key="tarefa.id" :cols="tarefa.flex">
-          <v-card class="lime darken-1 elevation-1 pa-md-2">
-            <v-list-item @click.stop="mostrarDialog(tarefa)">
-              <h4 class="h4">{{ tarefa.título }}</h4>
-            </v-list-item>
-            <v-list-item class="white--text">
-              Editado em: {{ tarefa.dataGravacao }}
-              <v-spacer></v-spacer>
-              <v-list-item-action @click.stop="deletar(tarefa.id)">
-                <v-icon color="red">mdi-delete</v-icon>
-              </v-list-item-action>
-            </v-list-item>
-          </v-card>
-        </v-col>
-      </v-row>
+            <div class="botoes mt-9">
+              <v-btn
+                @click="submitLogin"
+                elevation="2"
+                x-large
+                color="#E8E5AE"
+                class="ms-4 primary--text"
+                >Login</v-btn
+              >
+              <v-btn
+                icon
+                elevation="2"
+                x-large
+                class="ms-4 secondary"
+                @click="loginGoogle"
+              >
+                <v-icon color="primary">mdi-google</v-icon>
+              </v-btn>
+            </div>
+          </v-col>
+        </v-row>
+      </v-img>
     </v-container>
+  </div>
 
-    <v-row>
-      <v-dialog v-model="showDialog" max-width="800px">
-        <v-card>
-          <v-card-title>{{titulo}}</v-card-title>
-          <v-divider></v-divider>
-          <v-card-subtitle class="my-2">
-            <p style="white-space: pre-line">{{texto}}</p>
-          </v-card-subtitle>
-          <v-card-text>
-            <v-footer>{{data}}</v-footer>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-    </v-row>
-  </v-container>
+  <!-- Fazer areas -->
 </template>
 
 <script>
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth";
 import * as fb from "@/plugins/firebase";
-import dialogg from "../components/dialog.vue";
-
+import { mapActions } from "vuex";
 export default {
-  components: { dialogg },
-  data() {
-    return {
-      uid: "",
-      novaTarefa: {},
-      tarefas: [],
-      showDialog: false,
-      titulo: "",
-      texto: "",
-      data: ""
-    };
-  },
-  mounted() {
-    this.uid = fb.auth.currentUser.uid;
-    this.buscarTarefas();
-  },
   methods: {
-    async buscarTarefas() {
-      this.tarefas = [];
-      const logTasks = await fb.tasksCollection
-        .where("owner", "==", this.uid)
-        .get();
-      for (const doc of logTasks.docs) {
-        this.tarefas.push({
-          id: doc.id,
-          título: doc.data().título,
-          texto: doc.data().texto,
-          dataGravacao: doc.data().dataGravacao
-        });
-        if (this.tarefas.length > 0) {
-          const card = document.getElementById("card");
-          card.classList.remove("d-flex");
-          card.classList.add("d-none");
-        }
-      }
-    },
-    async adicionar(novaTarefa) {
-      this.novaTarefa = novaTarefa;
-      await fb.tasksCollection.add({
-        título: novaTarefa.titulo,
-        texto: novaTarefa.texto,
-        dataGravacao: new Date().toISOString().slice(0, 10),
-        owner: this.uid
+    ...mapActions("auth", ["logout", "login"]),
+    submitLogin() {
+      this.$router.push({
+        path: "/login",
       });
-      this.novaTarefa = {};
-      this.buscarTarefas();
     },
-    async deletar(id) {
-      await fb.tasksCollection.doc(id).delete();
-      this.buscarTarefas();
+    loginGoogle() {
+      const provider = new GoogleAuthProvider();
+      signInWithRedirect(fb.auth, provider);
+      //provider.addScope('https://www.googleapis.com/auth/books');
+      getRedirectResult(fb.auth)
+        .then((result) => {
+          const user = result.user;
+          console.log(this.user)
+          this.login(user);
+        })
+        .catch();
     },
-    mostrarDialog(tarefa) {
-      this.titulo = tarefa.título;
-      this.texto = tarefa.texto;
-      this.data = tarefa.dataGravacao;
-      this.showDialog = !this.showDialog;
-    }
-  }
+  },
 };
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@300&family=Encode+Sans&family=Libre+Baskerville&display=swap");
+
+.subtitle-2 {
+  font-family: "Alegreya Sans SC", sans-serif;
+}
+
+#titulo {
+  font-family: "Libre Baskerville", serif;
+  font-size: 6em;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #e8e5ae;
+}
+
+#divider {
+  width: 50%;
+}
+
+#subtitulo {
+  font-family: "Encode Sans", sans-serif;
+  color: #e8e5ae;
+}
+
+.livroo {
+  margin: -290px 0vw -295px 50vw;
+  position: relative;
+}
+
+.textoFooter {
+  font-family: "Alegreya Sans SC", sans-serif;
+  font-size: 1em;
+}
+
+#conteudo {
+  font-family: "Encode Sans", sans-serif;
+  color: #e8e5ae;
+}
+
+.footer {
+  height: 5vh;
+}
+
+.lista-app-bar:hover {
+  cursor: pointer;
+}
 </style>

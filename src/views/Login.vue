@@ -1,44 +1,52 @@
 <template>
-  <v-container fill-height fluid text-center class="teal darken-4">
-    <v-container>
-      <v-row>
-        <v-col
-          class="red--text text-center mx-auto pb-4"
-          cols="1"
-          sm="4"
-          offset="4"
-          ><h1 class="h1">Login</h1>
-        </v-col>
-      </v-row>
-      <v-row class="elevation-3 mx-auto teal darken-3">
-        <v-col cols="auto">
-          <v-img
-            max-height="270"
-            max-width="500"
-            src="@/assets/images/JUEKI.jpg"
-          ></v-img>
-        </v-col>
-        <v-col>
-          <v-form class="pa-md-4">
+  <v-container fluid class="pa-0">
+    <v-img
+      class="d-flex align-center"
+      max-height="89vh"
+      src="@/assets/images/Group 3.png"
+    >
+      <v-row align="center">
+        <v-col cols="6" class="ms-md-12 col">
+          <div class="titulo"></div>
+          <div id="titulo">Login</div>
+          <v-container class="inputs">
+            <v-divider color="#434C6D"></v-divider>
             <v-text-field
-              label="E-mail"
-              color="red"
               v-model="user.email"
+              dense
+              outlined
+              class="mt-6"
+              label="E-mail"
             ></v-text-field>
             <v-text-field
-              color="red"
-              label="Senha"
               v-model="user.password"
-              :type="show ? 'text' : 'password'"
-              :append-icon="show ? 'mdi-eye-off' : 'mdi-eye'"
-              @click:append="show = !show"
+              type="password"
+              dense
+              outlined
+              label="Senha"
             ></v-text-field>
-            <v-btn color="lime darken-1" @click="login">Login</v-btn>
-            <v-btn color="red" class="ml-2" @click="reset">Cancelar</v-btn>
-          </v-form>
+            <a
+              href="https://www.google.com/intl/pt/gmail/about/#"
+              target="_blank"
+              class="subtitle-2"
+              >Não tenho e-mail</a
+            >
+            <div class="botao">
+              <v-btn @click="submitLogin" color="#E8E5AE" class="mt-4"
+                >Login</v-btn
+              >
+            </div>
+          </v-container>
         </v-col>
+        <!-- <v-col cols="5" class="ms-md-12 logo">
+          <div class="titulo">
+            <div id="logo">Wormz</div>
+            <v-divider cols="3" id="divider" color="#E8E5AE"></v-divider>
+            <div id="conteudo" class="mt-6">Quer descobrir sua próxima leitura?</div>
+          </div>
+        </v-col>  !-->
       </v-row>
-    </v-container>
+    </v-img>
     <v-snackbar color="red" v-model="errorLogin" danger multline timeout="2000"
       >Usuário ou senha inválidos</v-snackbar
     >
@@ -61,7 +69,10 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import * as fb from "@/plugins/firebase";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
+
 export default {
   data() {
     return {
@@ -72,18 +83,16 @@ export default {
     };
   },
   methods: {
-    reset() {
-      this.user = {};
-    },
-    async login() {
+    ...mapActions("auth", ["login"]),
+    async submitLogin() {
       try {
-        await fb.auth.signInWithEmailAndPassword(
+        const user = await signInWithEmailAndPassword(
+          fb.auth,
           this.user.email,
           this.user.password
         );
-        this.$router.push({
-          name: "Home",
-        });
+        this.login(user.user);
+        this.$router.push({ name: "Home" });
       } catch (error) {
         const errorCode = error.code;
         switch (errorCode) {
@@ -104,15 +113,44 @@ export default {
     },
     async criarNovaConta() {
       this.novaConta = false;
-      await fb.auth.createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
+        fb.auth,
         this.user.email,
         this.user.password
       );
-      this.login();
+      this.login(this.user);
     },
   },
 };
 </script>
 
 <style scoped>
+.col {
+  text-align: center;
+}
+#titulo {
+  font-family: "Libre Baskerville", serif;
+  font-size: 2.5em;
+  color: black;
+}
+
+.inputs {
+  max-width: 50%;
+}
+
+#logo {
+  font-family: "Libre Baskerville", serif;
+  font-size: 4em;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #e8e5ae;
+}
+
+.logo {
+  margin: 60vh 0 0 0;
+}
+
+#conteudo {
+  font-family: "Encode Sans", sans-serif;
+  color: #e8e5ae;
+}
 </style>
